@@ -4,7 +4,6 @@ from sklearn.metrics import silhouette_score
 import symnmf
 import kmeans
 
-
 def main():
     if len(sys.argv) != 3:
         print("An Error Has Occurred")
@@ -23,7 +22,7 @@ def main():
         print("An Error Has Occurred")
         sys.exit(1)
     
-    n = data.shape[0] 
+    n = data.shape[0]
     
     if k < 1 or k >= n:
         print("An Error Has Occurred")
@@ -38,14 +37,12 @@ def main():
     H = np.random.uniform(0, 2 * np.sqrt(m/k), (n, k)).tolist()
     
     H_final = symnmf.symnmf(H, W)
-    
     H_np = np.array(H_final)
     
     nmf_labels = np.argmax(H_np, axis=1)
     
-    from sklearn.cluster import KMeans
-    kmeans = KMeans(n_clusters=k, random_state=1234, n_init=10, max_iter=300).fit(data)
-    kmeans_labels = kmeans.labels_
+    # --- Use your own KMeans! ---
+    kmeans_labels = kmeans.kmeans(data_list, k, max_iter=300)
     
     try:
         nmf_score = silhouette_score(data, nmf_labels)
